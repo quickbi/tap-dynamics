@@ -10,7 +10,7 @@ setup(
     install_requires=[
         "requests==2.22.0",
         "singer-python==5.8.1",
-        "odata @ https://github.com/dreamdata-io/python-odata/archive/master.zip",
+        "odata @ git+https://github.com/dreamdata-io/python-odata",
     ],
     entry_points="""
           [console_scripts]
