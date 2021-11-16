@@ -16,6 +16,7 @@ LOGGER = singer.get_logger()
 
 REQUIRED_CONFIG_KEYS = [
     "start_date",
+    "tables",
     "client_id",
     "client_secret",
     "tenant_id",
@@ -24,7 +25,7 @@ REQUIRED_CONFIG_KEYS = [
 ]
 
 
-def do_discover(service):
+def do_discover(service, selected_tables):
     LOGGER.info("Testing authentication")
     try:
         pass  ## TODO: test authentication
@@ -32,7 +33,7 @@ def do_discover(service):
         raise Exception("Error testing Dynamics authentication")
 
     LOGGER.info("Starting discover")
-    catalog = discover(service)
+    catalog = discover(service, selected_tables)
     return catalog
 
 
@@ -95,7 +96,8 @@ def main():
     service = ODataService(
         url, reflect_entities=True, auth=DynamicsAuth(parsed_args.config)
     )
-    catalog = parsed_args.catalog or do_discover(service)
+    selected_tables = parsed_args.config["tables"]
+    catalog = parsed_args.catalog or do_discover(service, selected_tables)
     if parsed_args.discover:
         json.dump(catalog.to_dict(), sys.stdout, indent=2)
 
