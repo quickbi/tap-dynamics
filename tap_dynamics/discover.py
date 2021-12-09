@@ -1,29 +1,5 @@
 from singer.catalog import Catalog, CatalogEntry, Schema
 
-selected_tables = [
-    "accounts",
-    "campaigns",
-    "leads",
-    "opportunities",
-    "contacts",
-    "transactioncurrencies",
-    "salesorders",
-    "systemusers",
-    "msdyncrm_linkedinaccounts",
-    "msdyncrm_linkedinactivities",
-    "msdyncrm_linkedincampaigns",
-    "msdyncrm_linkedinconfigurations",
-    "msdyncrm_linkedinfieldmappings",
-    "msdyncrm_linkedinformanswers",
-    "msdyncrm_linkedinformquestions",
-    "msdyncrm_linkedinforms",
-    "msdyncrm_linkedinformsubmissions",
-    "msdyncrm_linkedinleadmatchingstrategies",
-    "msdyncrm_linkedinuserprofile_accountset",
-    "msdyncrm_linkedinuserprofiles",
-    "msdyncrm_msdyncrm_linkedinlms_fieldmappingset",
-]
-
 
 def get_schema(odata_schema):
     json_props = {}
@@ -71,7 +47,7 @@ def get_schema(odata_schema):
     return json_schema, metadata, pks
 
 
-def discover(service):
+def discover(service, selected_tables):
     catalog = Catalog([])
 
     for entity_name, entity in service.entities.items():
