@@ -1,7 +1,11 @@
 from singer.catalog import Catalog, CatalogEntry, Schema
 
+BACKUP_PRIMARY_KEYS = {
+    'systemusers': ['systemuserid'],
+}
 
-def get_schema(odata_schema):
+
+def get_schema(odata_schema, entity_name):
     json_props = {}
     metadata = []
     pks = []
@@ -38,6 +42,9 @@ def get_schema(odata_schema):
 
         json_props[prop_name] = prop_json_schema
 
+    if not pks:
+        pks = BACKUP_PRIMARY_KEYS.get(entity_name, [])
+
     json_schema = {
         "type": "object",
         "additionalProperties": False,
@@ -53,7 +60,10 @@ def discover(service, selected_tables):
     for entity_name, entity in service.entities.items():
         if entity_name not in selected_tables:
             continue
-        schema_dict, metadata, pks = get_schema(entity.__odata_schema__)
+        schema_dict, metadata, pks = get_schema(
+            entity.__odata_schema__,
+            entity_name
+        )
         metadata.append({"breadcrumb": [], "metadata": {"selected": True}})
         schema = Schema.from_dict(schema_dict)
 
